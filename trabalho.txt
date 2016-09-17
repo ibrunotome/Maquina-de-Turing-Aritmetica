@@ -1,20 +1,57 @@
+;##############################################################################
+; PRIMEIRA PARTE
+;
+; Função que realiza o complemento de 2
+;##############################################################################
+
 ; Complemento de 2, inverte números até encontrar espaço
-0 0 1 r 0
-0 1 0 r 0
-0 _ _ l 1
+1 0 1 r 1
+1 1 0 r 1
+1 _ _ l 2
 
 ; Complemento de 2, somando 1
-1 0 1 l 2
-1 1 0 l 3
+2 0 1 l 3
+2 1 0 l 4
 
 ; Caminha para a esquerda repetindo o que lê
-2 0 0 l 2
-2 1 1 l 2
-2 _ * * 4
+3 0 0 l 3
+3 1 1 l 3
+3 _ * * 5
 
 ; Caminha para a esquerda invertendo o número
-3 1 0 l 3
-3 0 1 l 2
-3 _ * * 4
+4 1 0 l 4
+4 0 1 l 3
+4 _ * * 5
 
-4 * * * halt-accept
+5 * * * halt-accept
+
+;##############################################################################
+; SEGUNDA PARTE
+;
+; Função que realiza a cópia de elementos da parte esquerda de um operador
+; para a parte esquerda do delimitador '|'
+; a = 0 já lido
+; b = 1 já lido
+; | = delimitador
+;##############################################################################
+
+; Copia elementos da parte esquerda da operação
+5 0 * l 5
+5 1 * l 5
+5 _ | r 6
+
+6 * * r 6
+6 + * l 7
+
+7 * * l 7
+7 0 a l 8
+7 1 b l 9
+7 | * * 10
+
+8 * * l 8
+8 _ 0 r 6
+
+9 * * l 9
+9 _ 1 r 6
+
+10 * * * halt-accept
