@@ -2,31 +2,6 @@
 0 _ | r 34
 
 ;##############################################################################
-; PRIMEIRA PARTE
-;
-; Realiza o complemento de 2
-;##############################################################################
-
-; Caminha para a direita invertendo números até encontrar espaço
-1 0 1 r 1
-1 1 0 r 1
-1 = * l 2
-
-; Somando 1
-2 0 1 l 3
-2 1 0 l 4
-
-; Caminha para a esquerda repetindo o que lê
-3 0 * l 3
-3 1 * l 3
-3 - * l 7 ; Realiza a soma
-
-; Caminha para a esquerda invertendo números até encontrar sinal de igualdade
-4 1 0 l 4
-4 0 1 l 3
-4 - * l 7 ; Realiza a soma
-
-;##############################################################################
 ; SEGUNDA PARTE
 ;
 ; Realiza a cópia de elementos da parte esquerda de um operador
@@ -129,7 +104,6 @@
 ; Formata o resultado
 ;##############################################################################
 
-25 - * r 37
 25 * * r 25
 25 a 0 r 25
 25 b 1 r 25
@@ -159,15 +133,40 @@
 ;##############################################################################
 ; NONA PARTE
 ;
+; Realiza a cópia de elementos da parte direita de um operador
+; para a parte esquerda do delimitador '|', para subtração
+; 
+; a = 0 já lido
+; b = 1 já lido
+; | = delimitador
+;##############################################################################
+
+30 * * r 30
+30 = * l 31
+
+31 * * l 31
+31 1 b * 32
+31 0 a * 33
+31 - * * 36
+
+32 * * l 32
+32 _ 1 * 30
+
+33 * * l 33
+33 _ 0 * 30
+
+;##############################################################################
+; DÉCIMA PARTE
+;
 ; Checa tipo de operação a ser feita
 ;##############################################################################
 
 34 * * r 34
 34 + * l 35
-34 - * r 1 ; É necessário realizar complemento de 2
+34 - * r 30
 
 ;##############################################################################
-; DÉCIMA PARTE
+; DÉCIMA PRIMEIRA PARTE
 ;
 ; Reposiciona cabeçote para soma
 ;##############################################################################
@@ -176,65 +175,57 @@
 35 _ * r 6 ; Cópia de elementos para adição
 
 ;##############################################################################
-; DÉCIMA PRIMEIRA PARTE
-;
-; Desfaz o complemento de 2 para o subtraendo
-;##############################################################################
-
-; Caminha para a direita invertendo números até encontrar igualdade
-37 a b r 37
-37 b a r 37
-37 0 1 r 37
-37 1 0 r 37
-37 = * l 38
-
-; Somando 1
-38 a b l 39
-38 b a l 40
-38 0 1 l 39
-38 1 0 l 40
-
-; Caminha para a esquerda repetindo o que lê
-39 a * l 39
-39 b * l 39
-39 0 * l 39
-39 1 * l 39
-39 - * r 45 ; Tenho que fazer complemento no resultado também
-
-; Caminha para a esquerda invertendo números até encontrar sinal de igualdade
-40 b a l 40
-40 a b l 39
-40 1 0 l 40
-40 0 1 l 39
-40 - * r 45 ; Tenho que fazer complemento no resultado também
-
-;##############################################################################
 ; DÉCIMA SEGUNDA PARTE
 ;
-; Desfaz complemento de 2 para o resultado
+; Realiza a subtração
 ;##############################################################################
 
-; Caminha para a direita invertendo números até encontrar espaço
-41 0 1 r 41
-41 1 0 r 41
-41 _ * l 42
+36 * * r 36 ; estado 1
+36 - * l 37 ; estado 2
 
-; Somando 1
-42 0 1 l 43
-42 1 0 l 44
+37 * * l 37
+37 0 a * 39 ; estado 4
+37 d b * 39
+37 1 b * 38 ; estado 3
+37 c a * 38
+37 _ * * 19
 
-; Caminha para a esquerda repetindo o que lê
-43 0 * l 43
-43 1 * l 43
-43 = * l 46
+38 * * l 38 ; estado 3
+38 | * l 40 ; estado 6
 
-; Caminha para a esquerda invertendo números até encontrar sinal de igualdade
-44 1 0 l 44
-44 0 1 l 43
-44 = * r 46
+39 * * l 39
+39 _ 0 r 42
+39 | * l 42 ; estado 8
 
-45 * * r 45
-45 = * r 41
+40 * * l 40
+40 _ 1 * 41 ; estado 7
+40 0 1 * 41
+40 1 0 * 41
 
-46 * * l 46
-46 - * r 25 ; Formata resultado
+41 * * r 41
+41 | * l 47 ; estado 13
+
+42 * * l 42
+42 _ 0 * 41
+42 0 * * 41
+42 1 b * 43 ; estado 9
+
+43 * * r 43
+43 | * r 44 ; estado 10
+
+44 * * r 44
+44 a * l 45 ; estado 11
+44 b * l 45
+
+45 0 c l 46
+45 1 d * 36
+45 | * * 36
+45 * * * 36
+
+46 0 c l 46
+46 | * * 36
+46 1 d * 36
+
+47 * * l 47
+47 0 a * 36
+47 1 b * 36
