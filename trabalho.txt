@@ -2,7 +2,7 @@
 0 _ | r 34
 
 ;##############################################################################
-; SEGUNDA PARTE
+; AUTOMATO 1 = COPIA ELEMENTOS ADIÇÃO
 ;
 ; Realiza a cópia de elementos da parte esquerda de um operador
 ; para a parte esquerda do delimitador '|', para adição
@@ -29,20 +29,20 @@
 9 _ 1 r 6
 
 ;##############################################################################
-; TERCEIRA PARTE
 ;
-; Procura operador
+; AUTOMATO 2 = PROCURA OPERADOR
+;
 ;##############################################################################
 
 10 b 1 r 10
 10 a 0 r 10
 10 + * r 11
-10 - * r 11 ; Realiza a soma normal, por causa do complemento de 2
+10 - * r 11 
 
 ;##############################################################################
-; QUARTA PARTE
 ;
-; Realiza a soma binária
+; AUTOMATO 3 = REALIZA A SOMA BINÁRIA
+;
 ;##############################################################################
 
 11 * * r 11
@@ -78,9 +78,9 @@
 18 1 b r 11 ; 0 + 1
 
 ;##############################################################################
-; QUINTA PARTE
+; 
+; AUTOMATO 4 = MOVE RESULTADO PARA DIREITA DA IGUALDADE
 ;
-; Move resultado para a parte direita da igualdade
 ;##############################################################################
 
 19 * * l 19
@@ -99,9 +99,9 @@
 22 _ 0 l 19
 
 ;##############################################################################
-; SEXTA PARTE
+; 
+; AUTOMATO 5 = FORMATA O RESULTADO
 ;
-; Formata o resultado
 ;##############################################################################
 
 25 * * r 25
@@ -110,9 +110,9 @@
 25 = * l 29
 
 ;##############################################################################
-; SÉTIMA PARTE
 ;
-; Checa se é necessário complemento de 2
+; AUTOMATO 6 = CHECA SE É NECESSÁRIO COMPLEMENTO DE 2
+;
 ;##############################################################################
 
 27 * * l 27
@@ -123,15 +123,15 @@
 28 = * r 1
 
 ;##############################################################################
-; OITAVA PARTE
+; 
+; AUTOMATO 7 = HALT ACCEPT
 ;
-; Se chegou até aqui, foi calculado corretamente
 ;##############################################################################
 
 29 * * * halt-accept
 
 ;##############################################################################
-; NONA PARTE
+; AUTOMATO 8 = COPIA ELEMENTOS SUBTRAÇÃO
 ;
 ; Realiza a cópia de elementos da parte direita de um operador
 ; para a parte esquerda do delimitador '|', para subtração
@@ -156,9 +156,9 @@
 33 _ 0 * 30
 
 ;##############################################################################
-; DÉCIMA PARTE
 ;
-; Checa tipo de operação a ser feita
+; AUTOMATO 9 = CHECA OPERAÇÃO A SER FEITA
+;
 ;##############################################################################
 
 34 * * r 34
@@ -166,18 +166,18 @@
 34 - * r 30
 
 ;##############################################################################
-; DÉCIMA PRIMEIRA PARTE
 ;
-; Reposiciona cabeçote para soma
+; AUTOMATO 10 = REPOSICIONA CABEÇOTE PARA SOMA
+;
 ;##############################################################################
 
 35 * * l 35
 35 _ * r 6 ; Cópia de elementos para adição
 
 ;##############################################################################
-; DÉCIMA SEGUNDA PARTE
+; 
+; AUTOMATO 11 = REALIZA A SOMA BINÁRIA
 ;
-; Realiza a subtração
 ;##############################################################################
 
 36 * * r 36 ; estado 1
