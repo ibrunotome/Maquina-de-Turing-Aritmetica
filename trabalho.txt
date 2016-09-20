@@ -128,7 +128,8 @@
 ;
 ;##############################################################################
 
-29 * * * halt-accept
+29 * * r 29
+29 = * * halt-accept
 
 ;##############################################################################
 ; AUTOMATO 8 = COPIA ELEMENTOS SUBTRAÇÃO
@@ -162,8 +163,9 @@
 ;##############################################################################
 
 34 * * r 34
-34 + * l 35
-34 - * r 30
+34 + * l 35 ; cópia para adição
+34 - * r 30 ; cópia para subtração
+34 x * l 0sm1 ; cópia para multiplicação
 
 ;##############################################################################
 ;
@@ -229,3 +231,217 @@
 47 * * l 47
 47 0 a * 36
 47 1 b * 36
+
+;##############################################################################
+; 
+; AUTOMATO 12 = REALIZA A CÓPIA DA OPERAÇÃO PARA A MULTIPLICAÇÃO
+;
+;##############################################################################
+
+0sm1 * * l 0sm1
+0sm1 | v l 0sm2
+0sm2 _ v l 0sm3
+0sm3 _ v l 0sm4
+0sm4 _ v l 0sm5
+0sm5 _ v l 0sm6
+0sm6 _ v l 0sm7
+0sm7 _ v l 0sm8
+0sm8 _ v l 0sm9
+0sm9 _ v l 0sm10
+0sm10 _ v l 0sm11
+0sm11 _ v l 0sm12
+0sm12 _ v l 0sm13
+0sm13 _ v l 0sm14
+0sm14 _ v l 0sm15
+0sm15 _ v l 0sm16
+0sm16 _ v l 0sm17
+0sm17 _ v l 0sm18
+0sm18 _ v l 0sm19
+0sm19 _ v l 0sm20
+0sm20 _ | r 1cm
+
+1cm * * r 1cm
+1cm a * l 2cm
+1cm b * l 2cm
+1cm = * l 2cm
+1cm | * r 7cmb
+
+2cm 0 a l 3cm
+2cm 1 b l 4cm
+2cm * * l 2cm
+2cm x # l 5cm
+2cm | * * 1cm
+
+3cm * * l 3cm
+3cm _ 0 r 6cm
+
+4cm * * l 4cm
+4cm _ 1 r 6cm
+
+5cm * * l 5cm
+5cm _ x r 6cm
+
+6cm * * r 6cm
+6cm 0 * r 6cm
+6cm 1 * r 6cm
+6cm | * r 1cm
+
+7cmb * * l 7cmb
+7cmb _ f r 7cm
+
+; Formata operação original
+7cm * * r 7cm
+7cm v _ r 7cm
+7cm a 0 r 7cm
+7cm b 1 r 7cm
+7cm # _ r 7cm
+7cm = _ l 8cm
+
+8cm * * l 8cm
+8cm _ * l 10m
+
+;##############################################################################
+; 
+; AUTOMATO 13 = REALIZA A MULTIPLICAÇÃO BINÁRIA
+;
+; Código adaptado do próprio exemplo do sistema morphett
+;
+;##############################################################################
+
+; Find end of num1
+10m _ _ l 11m
+10m x x l 11m
+10m 0 0 r 10m
+10m 1 1 r 10m
+
+; If last digit of num1 is 0, multiply num2 by 2
+11m 0 x r 20m
+; If last digit of num1 is 1, add num2 ta tally and then multiply num2 by 2
+11m 1 x r 30m
+
+; Multiply num2 by 2
+20m _ _ r 20m
+20m x x r 20m
+20m * * r 21m
+21m _ 0 l 25m ; Multiplication by 2 done, return ta end of num1
+21m * * r 21m
+25m _ _ l 26m
+25m * * l 25m
+26m _ _ r 80m ; Finished multiplying. Clean up
+26m x x l 26m
+26m 0 0 * 11m
+26m 1 1 * 11m
+
+; Add num2 ta tally
+30m _ _ r 30m
+30m x x r 30m
+30m * * r 31m
+31m _ _ l 32m
+31m * * r 31m
+32m 0 a l 40m ; Add a zero
+32m 1 b l 50m ; Add a one
+32m a a l 32m
+32m b b l 32m
+32m _ _ r 70m ; Finished adding
+
+; Adding a 0 ta tally
+40m _ _ l 41m
+40m * * l 40m ; Found end of num2
+41m _ _ l 41m
+41m * * l 42m ; Found start of num1
+42m _ _ l 43m ; Found end of num1
+42m * * l 42m
+43m a a l 43m
+43m b b l 43m
+43m 0 a r 44m
+43m 1 b r 44m
+43m _ a r 44m
+44m _ _ r 45m ; Found end of tally
+44m * * r 44m
+45m _ _ r 45m
+45m * * r 46m ; Found start of num1
+46m _ _ r 47m ; Found end of num1
+46m * * r 46m
+47m _ _ r 47m
+47m * * r 48m
+48m _ _ l 32m ; Found end of num2
+48m * * r 48m
+
+; Adding a 1 ta tally
+50m _ _ l 51m ; Found end of num2
+50m * * l 50m 
+51m _ _ l 51m
+51m * * l 52m ; Found start of num1
+52m _ _ l 53m ; Found end of num1
+52m * * l 52m
+53m | * * halt-reject-big-number ; Número muito grande
+53m a a l 53m
+53m b b l 53m
+53m _ b r 55m
+53m 0 b r 55m ; return ta num2
+53m 1 a l 54m
+54m 0 1 r 55m
+54m 1 0 l 54m
+54m _ 1 r 55m
+55m _ _ r 56m ; Found end of tally
+55m * * r 55m
+56m _ _ r 56m
+56m * * r 57m ; Found start of num1
+57m _ _ r 58m ; Found end of num1
+57m * * r 57m
+58m _ _ r 58m
+58m * * r 59m
+59m _ _ l 32m ; Found end of num2
+59m * * r 59m
+
+; Finished adding, clean up
+70m b 1 r 70m
+70m a 0 r 70m
+70m _ _ l 71m
+71m _ _ l 72m ; Found end of num2
+71m * * l 71m
+72m _ _ l 72m
+72m * * l 73m ; Found start of num1
+73m _ _ l 74m
+73m * * l 73m
+74m a 0 l 74m
+74m b 1 l 74m
+74m * * r 75m ; Finished cleaning up tally
+75m _ _ r 76m
+75m * * r 75m
+76m _ _ r 20m ; Multiply num2 by 2
+76m * * r 76m
+
+; Finished multiplying, clean up
+80m x _ r 80m
+80m _ _ r 81m
+81m _ _ l 82m
+81m * _ r 81m
+82m _ _ l 82m
+82m * * * 83m
+
+83m * * l 83m
+83m | = * 29 ; halt-accept
+83m _ = l 84m
+
+84m * * l 84m
+84m | _ l 84m
+84m 1 _ r 85m
+84m 0 _ r 87m
+84m x _ r 89m
+84m f _ * 29 ; halt-accept
+
+85m _ * r 85m
+85m * * l 86m
+
+86m _ 1 l 84m
+
+87m _ * r 87m
+87m * * l 88m
+
+88m _ 0 l 84m
+
+89m _ * r 89m
+89m * * l 90m
+
+90m _ x l 84m
