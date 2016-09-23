@@ -111,20 +111,6 @@
 ; Move resultado para a parte direita da igualdade
 ;##############################################################################
 
-19sub * * l 19sub
-19sub _ * r 19delete-one
-
-19delete-one b * r 19check-second-b
-19delete-one a * l 19add-one
-19delete-one 1 _ r 20
-
-19check-second-b b * l 19check-second-b
-19check-second-b _ * * 23
-19check-second-b * * l 19add-one
-
-19add-one b * l 19add-one
-19add-one _ * r 23
-
 19 * * l 19
 19 _ * r 20
 
@@ -141,8 +127,32 @@
 22 * * r 22
 22 _ 0 l 19
 
-23 * * r 23
-23 _ n l 19
+19sub * * l 19sub
+19sub _  * r 20sub
+
+20sub n _ r 21sub
+20sub b _ r 21sub
+20sub 1 * r 20check-b
+20sub a _ r 22sub
+20sub 0 _ r 22sub
+20sub | _ r 25
+
+21sub * * r 21sub
+21sub _ 1 l 19sub
+
+22sub * * r 22sub
+22sub _ 0 l 19sub
+
+20check-b b * l 20check-b
+20check-b 1 a l 20add-zero
+20check-b 0 a l 20
+20check-b a * l 20delete-one
+20check-b _ * * 22
+
+20delete-one 1 _ r 20sub
+
+20add-zero * * l 20add-zero
+20add-zero _ 0 * 20sub
 
 ;##############################################################################
 ; SEXTA PARTE
@@ -154,15 +164,7 @@
 25 * * r 25
 25 a 0 r 25
 25 b 1 r 25
-25 = * l check-result
-
-check-result * * l check-result
-check-result - * r check-negative-result
-check-result _ * l 29
-
-check-negative-result * * r check-negative-result
-check-negative-result n * r 41
-check-negative-result _ * * 29
+25 = * l 29
 
 ;##############################################################################
 ; SÉTIMA PARTE
@@ -271,53 +273,3 @@ finish-copy-add - * r 19sub
 40 1 0 l 40
 40 0 1 l 39
 40 - * r 25
-
-;##############################################################################
-; DÉCIMA SEGUNDA PARTE
-;
-; Desfaz complemento de 2 para o resultado
-;##############################################################################
-
-; Caminha para a direita invertendo números até encontrar espaço
-41 0 1 r 41
-41 1 0 r 41
-41 _ * l 42
-
-; Somando 1
-42 0 1 l 43
-42 1 0 l 44
-
-; Caminha para a esquerda repetindo o que lê
-43 0 * l 43
-43 1 * l 43
-43 n 1 * 29
-43 = * l 46
-
-; Caminha para a esquerda invertendo números até encontrar sinal de igualdade
-44 1 0 l 44
-44 0 1 l 43
-44 = * r 46
-
-45 * * r 45
-45 = * r 41
-
-46 * * l 46
-46 - * r 25 ; Formata resultado
-
-copy-result-left * * r copy-result-left
-copy-result-left 0 _ l copy-result-zero-left
-copy-result-left 1 _ l copy-result-one-left
-copy-result-left _ * r check-finish-copy-result
-
-copy-result-zero-left _ 0 r copy-result-left
-
-copy-result-one-left _ 1 r copy-result-left
-
-check-finish-copy-result _ * * halt-accept
-check-finish-copy-result * * * copy-result-left
-
-finish-copy-result _ * l finish-copy-result
-finish-copy-result 0 * * copy-result-left
-finish-copy-result 1 * * copy-result-left
-finish-copy-result * * l finish-copy-result
-finish-copy-result = * * 29
