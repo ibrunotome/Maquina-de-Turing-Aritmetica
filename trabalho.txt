@@ -40,7 +40,7 @@
 6 0 * r 6
 6 1 * r 6
 6 | * r 6
-6 * * l 7
+6 * * l 7 
 
 7 0 a l 8
 7 1 b l 9
@@ -107,7 +107,7 @@
 18 1 b r 11 ; 0 + 1
 
 ;##############################################################################
-; AUTOMATO 5 = MOVE RESULTADO
+; AUTOMATO 5 = MOVE RESULTADO EM CASO DE ADIÇÃO
 ;
 ; Move resultado para a parte direita da igualdade
 ;##############################################################################
@@ -116,12 +116,11 @@
 19 * * l 19
 19 _ * r 20
 
-20 n _ r 23
 20 b _ r 21
 20 1 _ r 21
 20 a _ r 22
 20 0 _ r 22
-20 | _ r 25
+20 | _ r 25 ; Formata o resultado
 
 21 * * r 21
 21 _ 1 l 19
@@ -129,11 +128,15 @@
 22 * * r 22
 22 _ 0 l 19
 
-; Estados 19sub ao 22sub movem no caso de subtração
+;##############################################################################
+; AUTOMATO 5.5 = MOVE RESULTADO EM CASO DE SUBTRAÇÃO
+;
+; Move resultado para a parte direita da igualdade
+;##############################################################################
+
 19sub * * l 19sub
 19sub _  * r 20sub
 
-20sub n _ r 21sub
 20sub b _ r 21sub
 20sub 1 * r 20check-b
 20sub a _ r 22sub
@@ -187,7 +190,7 @@
 34 + * l 35 ; Reposiciona cabeçote para a soma
 34 - * r copy-add ; É necessário realizar complemento de 2
 34 x * l 0sm1 ; Cópia para multiplicação
-
+ 
 ;##############################################################################
 ; AUTOMATO 9 = ADICIONA UM ZERO A ESQUERDA DO SUBTRAENDO
 ;
@@ -258,10 +261,7 @@ finish-copy-add - * r 19sub
 38 1 0 l 40
 
 ; Caminha para a esquerda repetindo o que lê
-39 a * l 39
-39 b * l 39
-39 0 * l 39
-39 1 * l 39
+39 * * l 39
 39 - * r 25
 
 ; Caminha para a esquerda invertendo números até encontrar sinal de igualdade
